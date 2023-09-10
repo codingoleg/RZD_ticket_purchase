@@ -27,6 +27,8 @@
             required_plaz_seat_types: желаемые типы мест плацкарта, начиная с
                 более приоритетных. Все доступные типы мест есть в модуле
                 ./templates/templates.py в переменной car_classes[plazcart].
+                Обязательно должен включать в себя хотя бы один тип из списка:
+                "Нижнее", "Верхнее", "Боковое нижнее", "Боковое верхнее".
 
         Опциональные:
             excluded_plaz: набор номеров поездов, которые исключены из поиска.
@@ -115,10 +117,12 @@ required_plaz_seat_types: Tuple = (
     templates.lower_last,
     templates.lower_last_module,
     templates.lower_side,
+    templates.lower_side_toilet,
     templates.upper,
     templates.upper_last,
     templates.upper_last_module,
     templates.upper_side,
+    templates.upper_side_toilet,
 )
 
 # # Опциональные для плацкарта
@@ -150,6 +154,6 @@ reduced_fee_doc_type: str = ''
 reduced_fee_doc_number: str = ''
 
 # Опциональные параметры телеграма
-bot: bool = True
+bot: bool = False
 TOKEN: str = 'ВАШ ТОКЕН'
 TG_USER_ID: str = 'ID пользователя'
