@@ -21,6 +21,24 @@ class TestConfig(unittest.TestCase):
         """Обязательные для плацкарта"""
         for seat_type in cfg.required_plaz_seat_types:
             self.assertIn(seat_type, templates.car_classes[templates.plazcart])
+        if templates.lower_last in cfg.required_plaz_seat_types \
+                or templates.lower_last_module in cfg.required_plaz_seat_types:
+            self.assertIn(templates.lower, cfg.required_plaz_seat_types,
+                          'Должно быть добавлено templates.lower в '
+                          'required_plaz_seat_types')
+        if templates.upper_last in cfg.required_plaz_seat_types\
+                or templates.upper_last_module in cfg.required_plaz_seat_types:
+            self.assertIn(templates.upper, cfg.required_plaz_seat_types,
+                          'Должно быть добавлено templates.upper в '
+                          'required_plaz_seat_types')
+        if templates.lower_side_toilet in cfg.required_plaz_seat_types:
+            self.assertIn(templates.lower_side, cfg.required_plaz_seat_types,
+                          'Должно быть добавлено templates.lower_side в '
+                          'required_plaz_seat_types')
+        if templates.upper_side_toilet in cfg.required_plaz_seat_types:
+            self.assertIn(templates.upper_side, cfg.required_plaz_seat_types,
+                          'Должно быть добавлено templates.upper_side в '
+                          'required_plaz_seat_types')
         self.assertIsInstance(cfg.bedding, bool)
 
     def test_mandatory_rzd_coupe(self):
