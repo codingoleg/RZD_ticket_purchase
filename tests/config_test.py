@@ -25,7 +25,7 @@ class TestConfig(unittest.TestCase):
 
     def test_mandatory_rzd_coupe(self):
         """Обязательные для купе"""
-        for seat_type in cfg.required_plaz_seat_types:
+        for seat_type in cfg.required_coupe_seat_types:
             self.assertIn(seat_type, templates.car_classes[templates.coupe])
         self.assertIn(cfg.gender, {templates.man, templates.woman})
 
