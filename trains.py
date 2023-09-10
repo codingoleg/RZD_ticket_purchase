@@ -494,7 +494,13 @@ class Plaz(Trains):
         seats_list = []
 
         for seat_type in cfg.required_plaz_seat_types:
-            seats_list.extend(templates.plaz_seats[seat_type])
+            # Эти типы мест уже включены в другие типы. Они нужны только для
+            # сканера основной страницы.
+            if seat_type not in (
+                    templates.lower_last, templates.lower_last_module,
+                    templates.upper_last, templates.upper_last_module
+            ):
+                seats_list.extend(templates.plaz_seats[seat_type])
         return seats_list
 
     @find_tickets
