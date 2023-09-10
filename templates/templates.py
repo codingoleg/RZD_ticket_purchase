@@ -38,6 +38,7 @@ upper = 'Верхнее'
 upper_last = 'Последнее купе, верхнее'
 upper_last_module = 'Последнее купе (отсек), верхнее'
 upper_side = 'Боковое верхнее'
+upper_side_toilet = 'Боковое верхнее у туалета'
 without_table_forward = 'Не у стола, по ходу'
 without_table_backward = 'Не у стола, против хода'
 without_window_forward = 'Без окна, по ходу'
@@ -133,6 +134,7 @@ car_classes = {
         upper_last,
         upper_last_module,
         upper_side,
+        upper_side_toilet,
     ),
     sitting: (
         table,
