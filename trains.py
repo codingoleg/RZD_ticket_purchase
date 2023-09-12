@@ -32,7 +32,7 @@ else:
     logging.info('Телеграм бот не запущен. Ввод смс-кода только через браузер')
 
 
-def reload_error_page(train_func: Callable):
+def reload_error_page(train_func: Callable) -> Callable:
     """
     Обновить страницу, если любая из функций класса webdriver выдаст ошибку.
     Args:
@@ -76,7 +76,7 @@ def start_driver() -> True:
     return True
 
 
-def find_tickets(get_best_seat: Callable):
+def find_tickets(get_best_seat: Callable) -> Callable:
     """
     Args:
         get_best_seat: Поиск лучшего места для соответствующего класса вагона
