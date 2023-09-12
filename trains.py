@@ -29,7 +29,7 @@ if cfg.bot:
     bot = telebot.TeleBot(token=cfg.TOKEN)
     logging.info('Телеграм бот запущен')
 else:
-    logging.info('Телеграм бот не запущен')
+    logging.info('Телеграм бот не запущен. Ввод смс-кода только через браузер')
 
 
 def reload_error_page(train_func: Callable):
@@ -63,10 +63,8 @@ def alert_user(msg) -> None:
 
 @reload_error_page
 def start_driver() -> True:
-    """
-    Страртует webdriver с указанными настройками и получает URL.
-    Работа headless не гарантируется - возможны ошибки.
-    """
+    """Страртует webdriver с указанными настройками и получает URL.
+    Работа headless не гарантируется - возможны ошибки."""
     global driver
     url_rzd = 'https://www.rzd.ru/'
     options = webdriver.FirefoxOptions()
@@ -88,8 +86,7 @@ def find_tickets(get_best_seat: Callable):
 
     @functools.wraps(get_best_seat)
     def wrapper(self: Trains) -> bool:
-        """
-        Поиск билета нужного класса вагона (плацкарт, купе и т.д.).
+        """Поиск билета нужного класса вагона (плацкарт, купе и т.д.).
         Если место найдено, выбирает лучшее.
         Args:
             self: подкласс класса Trains
@@ -150,9 +147,7 @@ class Trains:
 
     @staticmethod
     def run_scanner(car_classes: Tuple) -> True:
-        """
-        Запуск сканирования для всех указанных классов поездов.
-        """
+        """Запуск сканирования для всех указанных классов поездов."""
         while True:
             # Поиск для каждого класса поезда
             for car_class in car_classes:
@@ -165,12 +160,10 @@ class Trains:
 
     @reload_error_page
     def initial_search(self) -> True:
-        """
-        Поиск билетов со стартовой страницы с заданными параметрами:
+        """Поиск билетов со стартовой страницы с заданными параметрами:
         - Станция отправления
         - Станция прибытия
-        - Дата отправления
-        """
+        - Дата отправления"""
 
         # Станция отправления
         self.waitpid(xp.direction_from_field)
@@ -196,21 +189,16 @@ class Trains:
             excluded_trains: set,
             included_trains: set
     ) -> bool:
-        """
-        Ищет на странице выдачи желаемый класс вагона, наводя на него и
+        """Ищет на странице выдачи желаемый класс вагона, наводя на него и
         исследуя содержимое всплывающего окна.
         Если в содержимом окна есть желаемый тип места, нажимает на него.
         Если желаемого типа места нет, переходит к следующему поезду.
-
         Args:
-            included_trains: набор номеров поездов, которые нужно включить в
-                поиск.
-            excluded_trains: набор номеров поездов, которые нужно исключить из
-                поиска.
-            required_car_class: Желаемый класс вагона.
-            required_car_seat_type: Кортеж желаемых типов мест в вагоне,
-                начиная с самого приоритетного.
-
+            included_trains: номера поездов, которые нужно включить в поиск.
+            excluded_trains: номера поездов, которые нужно исключить из поиска.
+            required_car_class: желаемый класс вагона.
+            required_car_seat_type: желаемые типы мест в вагоне, начиная с
+                самого приоритетного.
         Returns:
             True, если найден желаемый класс вагона и тип места в вагоне.
             False, если не найден.
@@ -331,18 +319,15 @@ class Trains:
 
     @reload_error_page
     def choose_priveleges(self) -> True:
-        """
-        Выбрать скидки/промокоды. Бронирование на 15 минут.
+        """Выбрать скидки/промокоды. Бронирование на 15 минут.
         Все пункты заполняются, но на данный момент нет возможности проверить
         работоспособность 0, 1 и 4 пунктов за неимением нужных документов.
-
         Порядковый номер привилегий:
         0: Льготный проезд и ВТТ
         1: Проездная карта
         2: РЖД Бонус
         3: Если пассажир медработник
-        4: Скидки
-        """
+        4: Скидки"""
 
         # Получаем список привилегий
         priveleges = self.dfsx(xp.priveleges_panel)
@@ -461,11 +446,11 @@ class Trains:
 class Plaz(Trains):
     """Класс плацкарта"""
 
-    def __get_seats_info(self) -> List[Tuple]:
-        """
+    def __get_seats_info(self) -> List[Tuple[str, int, float]]:
+        """Получает информацию о свободных местах в вагоне.
         Returns:
-            Список кортежей информации о свободных местах в вагоне.
-            Каждый кортеж имеет вид: (вагон: str, место: int, цена: float).
+            Каждый кортеж внутри списка имеет вид:
+                (вагон: str, место: int, цена: float).
         """
         seats_info = []
 
@@ -486,8 +471,7 @@ class Plaz(Trains):
 
     @staticmethod
     def __create_seats_list() -> List[int]:
-        """
-        Добавляет в список номера мест, исходя из желаемых типов мест.
+        """Добавляет в список номера мест, исходя из желаемых типов мест.
         Returns:
             Список номеров мест.
         """
@@ -496,18 +480,18 @@ class Plaz(Trains):
         for seat_type in cfg.required_plaz_seat_types:
             # Эти типы мест уже включены в другие типы. Они нужны только для
             # сканера основной страницы.
-            if seat_type not in (
-                    templates.lower_last, templates.lower_last_module,
-                    templates.upper_last, templates.upper_last_module
+            if seat_type in (
+                templates.lower, templates.lower_side,
+                templates.upper, templates.upper_side
             ):
                 seats_list.extend(templates.plaz_seats[seat_type])
         return seats_list
 
     @find_tickets
-    def __get_best_seat(self) -> Tuple:
-        """
+    def __get_best_seat(self) -> Tuple[str, int, float]:
+        """Получает лучший вагон и место плацкарта по шаблону выбора мест.
         Returns:
-            Лучший вагон и место плацкарта по шаблону выбора мест.
+            Кортеж имеет вид: (вагон: str, место: int, цена: float).
         """
         seats_info = self.__get_seats_info()
         seats_list = self.__create_seats_list()
@@ -518,7 +502,7 @@ class Plaz(Trains):
                     return seat
 
     def get_seat(self):
-        """Если место найдено, выбрать лучший вагон и место."""
+        """Если место найдено, выбирает лучший вагон и место."""
         if self.find_car_class(
                 required_car_class=templates.plazcart,
                 required_car_seat_type=cfg.required_plaz_seat_types,
@@ -532,14 +516,13 @@ class Plaz(Trains):
 class Coupe(Trains):
     """Класс купе"""
 
-    def __get_seats_info(self) -> List[Tuple]:
-        """
-        Добавляем информацию о месте, если соблюдены оба условия:
+    def __get_seats_info(self) -> List[Tuple[str, int, float, str]]:
+        """Добавляем информацию о месте, если соблюдены оба условия:
         1) совпадает тип места с желаемым
         2) совпадает пол купе и пассажира, или гендерное купе отсутстввует
         Returns:
             Список кортежей информации о свободных местах в вагоне.
-            Каждый кортеж имеет вид:
+            Каждый кортеж внутри списка имеет вид:
                 (вагон: str, место: int, цена: float, тип места: str).
         """
         seats_info = []
@@ -569,7 +552,7 @@ class Coupe(Trains):
         return seats_info
 
     @find_tickets
-    def __get_best_seat(self) -> Tuple:
+    def __get_best_seat(self) -> Tuple[str, int, float, str]:
         """
         Returns:
             Лучший вагон и место купе по очередности желаемых типов мест
