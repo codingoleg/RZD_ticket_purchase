@@ -144,7 +144,7 @@ included_coupe: set[str] = set()
 non_refundable = False
 
 # Опциональные параметры РЖД
-child_name: str = 'Иванов Андрей Петрович'
+child_name: str = ''
 rzd_bonus: str = ''
 paramedic: bool = False
 passenger_card_type: str = ''
